@@ -1,11 +1,11 @@
-#include "ListaDoble.hpp"
-#include "ListaDobleVisual.hpp"
+#include "../Model/ListaDoble.hpp"
+#include "../View/ListaDobleVisual.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
 void ejecutarListaDoble(sf::RenderWindow& window) {
     sf::Font fuente;
-    if (!fuente.loadFromFile("C:/Windows/Fonts/consola.ttf")) {
+    if (!fuente.openFromFile("C:/Windows/Fonts/consola.ttf")) {
         std::cerr << "No se pudo cargar la fuente.\n";
         return;
     }

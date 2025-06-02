@@ -1,77 +1,10 @@
 #include "PilaVista.hpp"
 
-PilaVista::PilaVista(sf::RenderWindow* window) : ventana(window), estadoActual(MENU_PRINCIPAL),
+PilaVista::PilaVista(sf::RenderWindow* window) : VistaBase(window), estadoActual(GESTION_PILA),
                                         tiempoAnimacion(0.0f), tipoAnimacionActual(SIN_ANIMACION),
                                         animacionEnCurso(false), elementoEnAnimacion(),
                                         mostrandoTop(false), tiempoMostrarTop(0.0f) {
     elementoEnAnimacion.activo = false;
-}
-
-bool PilaVista::cargarFuente() {
-    if (!fuente.openFromFile("C:/Windows/Fonts/arial.ttf")) {
-        if (!fuente.openFromFile("C:/Windows/Fonts/calibri.ttf")) {
-            if (!fuente.openFromFile("C:/Windows/Fonts/times.ttf")) {
-                std::cout << "Error: No se pudo cargar ninguna fuente" << std::endl;
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-void PilaVista::mostrarMenuPrincipal() {
-    limpiarPantalla();
-
-    // Fondo simple
-    sf::RectangleShape fondo(sf::Vector2f(1000, 700));
-    fondo.setFillColor(sf::Color(25, 30, 45));
-    fondo.setPosition(sf::Vector2f(0, 0));
-    ventana->draw(fondo);
-
-    // Titulo principal
-    sf::Text titulo(fuente, "GESTOR DE ESTRUCTURAS DE DATOS", 26);
-    titulo.setFillColor(sf::Color::White);
-    titulo.setPosition(sf::Vector2f(250, 150));
-    titulo.setStyle(sf::Text::Bold);
-
-    // Marco simple para opciones
-    sf::RectangleShape marco(sf::Vector2f(350, 250));
-    marco.setFillColor(sf::Color(35, 40, 55));
-    marco.setOutlineThickness(2);
-    marco.setOutlineColor(sf::Color(70, 130, 180));
-    marco.setPosition(sf::Vector2f(325, 220));
-
-    // Opciones del menu
-    sf::Text opcion1(fuente, "1. Gestion de Pila", 20);
-    opcion1.setFillColor(sf::Color(100, 255, 100));
-    opcion1.setPosition(sf::Vector2f(360, 260));
-
-    sf::Text opcion2(fuente, "2. Gestion de Cola", 20);
-    opcion2.setFillColor(sf::Color(255, 255, 100));
-    opcion2.setPosition(sf::Vector2f(360, 300));
-
-    sf::Text opcion3(fuente, "3. Gestion de Lista", 20);
-    opcion3.setFillColor(sf::Color(255, 150, 100));
-    opcion3.setPosition(sf::Vector2f(360, 340));
-
-    sf::Text opcion4(fuente, "4. Salir", 20);
-    opcion4.setFillColor(sf::Color(255, 100, 100));
-    opcion4.setPosition(sf::Vector2f(360, 380));
-
-    // Instrucciones
-    sf::Text instrucciones(fuente, "Presiona el numero de la opcion", 14);
-    instrucciones.setFillColor(sf::Color(150, 150, 150));
-    instrucciones.setPosition(sf::Vector2f(360, 420));
-
-    ventana->draw(titulo);
-    ventana->draw(marco);
-    ventana->draw(opcion1);
-    ventana->draw(opcion2);
-    ventana->draw(opcion3);
-    ventana->draw(opcion4);
-    ventana->draw(instrucciones);
-
-    mostrarPantalla();
 }
 
 void PilaVista::mostrarGestionPila(const ModeloPila& pila) {
@@ -154,7 +87,6 @@ void PilaVista::dibujarPila(const ModeloPila& pila) {
             posicion++;
         }
     } else {
-        // Durante animación...
         if (tipoAnimacionActual == ANIMACION_PUSH) {
             NodoPila* actual = pila.obtenerTope();
             if (actual && actual->siguiente) {
@@ -179,7 +111,7 @@ void PilaVista::dibujarPila(const ModeloPila& pila) {
         }
     }
 
-    // Mensaje si esta vacia (MOVIDO MÁS ABAJO)
+    // Mensaje si esta vacia
     if (pila.empty() && !animacionEnCurso) {
         sf::Text vacia(fuente, "TUBO VACIO", 20);
         vacia.setFillColor(sf::Color::Red);
@@ -318,7 +250,7 @@ void PilaVista::dibujarElementoAnimado() {
 
     // Efecto de particulas durante el movimiento
     if (tipoAnimacionActual == ANIMACION_PUSH) {
-        sf::Text efecto(fuente, "v", 20);  // Flecha hacia abajo
+        sf::Text efecto(fuente, "v", 20);
         efecto.setFillColor(sf::Color::Yellow);
         efecto.setPosition(sf::Vector2f(
             elementoEnAnimacion.posicionActual.x - 30,
@@ -336,7 +268,6 @@ void PilaVista::dibujarElementoAnimado() {
     }
 }
 
-// Funciones de animacion CORREGIDAS
 void PilaVista::iniciarAnimacionPush(int valor, sf::Color color, const ModeloPila& pila) {
     tipoAnimacionActual = ANIMACION_PUSH;
     animacionEnCurso = true;
@@ -367,9 +298,9 @@ void PilaVista::iniciarAnimacionPop(int valor, sf::Color color, const ModeloPila
     elementoEnAnimacion.activo = true;
     elementoEnAnimacion.progreso = 0.0f;
 
-    // Posicion inicial: donde está el TOP actualmente (CORREGIDO)
-    int totalElementos = pila.size(); // Ahora tiene un elemento menos
-    int nivelDesdeBase = totalElementos; // El elemento que se va estaba en este nivel
+    // Posicion inicial: donde est� el TOP actualmente
+    int totalElementos = pila.size();
+    int nivelDesdeBase = totalElementos;
     float inicioY = BASE_Y - CIRCLE_RADIUS * 2 - (nivelDesdeBase * (CIRCLE_RADIUS * 2 + CIRCLE_SPACING));
     elementoEnAnimacion.posicionActual = sf::Vector2f(BASE_X - CIRCLE_RADIUS, inicioY);
 
@@ -388,12 +319,7 @@ void PilaVista::actualizarAnimaciones(float deltaTime) {
     }
 
     if (animacionEnCurso && elementoEnAnimacion.activo) {
-        // Velocidad diferente para POP (MÁS LENTA)
         float velocidadActual = VELOCIDAD_ANIMACION;
-        if (tipoAnimacionActual == ANIMACION_POP) {
-            velocidadActual = VELOCIDAD_ANIMACION * 0.61f;  // POP 50% más lento
-        }
-
         elementoEnAnimacion.progreso += deltaTime * velocidadActual;
 
         if (elementoEnAnimacion.progreso >= 1.0f) {
@@ -401,24 +327,14 @@ void PilaVista::actualizarAnimaciones(float deltaTime) {
             terminarAnimacion();
         }
 
-        // Interpolar posicion con easing
         float t = easeInOutQuad(elementoEnAnimacion.progreso);
-
-        // Calcular posiciones inicial y final según el tipo de animación
-        sf::Vector2f posicionInicial, posicionFinal;
-
-        if (tipoAnimacionActual == ANIMACION_PUSH) {
-            posicionInicial = sf::Vector2f(BASE_X - CIRCLE_RADIUS, BASE_Y - 450);
-            posicionFinal = elementoEnAnimacion.posicionDestino;
-        } else {
-            posicionInicial = elementoEnAnimacion.posicionActual;
-            posicionFinal = sf::Vector2f(BASE_X - CIRCLE_RADIUS, BASE_Y - 450);
-        }
-
-        elementoEnAnimacion.posicionActual = interpolarPosicion(posicionInicial, posicionFinal, t);
+        elementoEnAnimacion.posicionActual = interpolarPosicion(
+            elementoEnAnimacion.posicionActual,
+            elementoEnAnimacion.posicionDestino,
+            t * deltaTime * 3.0f
+        );
     }
 }
-
 
 sf::Vector2f PilaVista::interpolarPosicion(sf::Vector2f inicio, sf::Vector2f fin, float t) {
     return sf::Vector2f(
@@ -441,10 +357,9 @@ void PilaVista::terminarAnimacion() {
     tipoAnimacionActual = SIN_ANIMACION;
 }
 
-// Panel de información CORREGIDO (sin "Animación: NINGUNA")
 void PilaVista::dibujarPanelInfo(const ModeloPila& pila) {
-    // Panel de informacion compacto (REDUCIDO)
-    sf::RectangleShape panelInfo(sf::Vector2f(200, 160));  // REDUCIDO de 180 a 160
+
+    sf::RectangleShape panelInfo(sf::Vector2f(200, 160));
     panelInfo.setFillColor(sf::Color(35, 40, 55));
     panelInfo.setOutlineThickness(2);
     panelInfo.setOutlineColor(sf::Color(70, 130, 180));
@@ -493,20 +408,18 @@ void PilaVista::dibujarPanelInfo(const ModeloPila& pila) {
         empty.setFillColor(sf::Color::Cyan);
     }
 
-    // ELIMINADO: Estado de animación
-
-    // Barra de capacidad (MOVIDA HACIA ARRIBA)
+    // Barra de capacidad
     sf::RectangleShape barraFondo(sf::Vector2f(150, 10));
     barraFondo.setFillColor(sf::Color(40, 40, 40));
     barraFondo.setOutlineThickness(1);
     barraFondo.setOutlineColor(sf::Color::White);
-    barraFondo.setPosition(sf::Vector2f(25, 165));  // MOVIDA HACIA ARRIBA
+    barraFondo.setPosition(sf::Vector2f(25, 165));
 
     sf::RectangleShape barraLleno(sf::Vector2f((150.0f * pila.size()) / 8.0f, 10));
     sf::Color colorBarra = pila.size() < 6 ? sf::Color::Green :
                           pila.size() < 8 ? sf::Color::Yellow : sf::Color::Red;
     barraLleno.setFillColor(colorBarra);
-    barraLleno.setPosition(sf::Vector2f(25, 165));  // MOVIDA HACIA ARRIBA
+    barraLleno.setPosition(sf::Vector2f(25, 165));
 
     ventana->draw(panelInfo);
     ventana->draw(tituloInfo);
@@ -518,14 +431,12 @@ void PilaVista::dibujarPanelInfo(const ModeloPila& pila) {
     ventana->draw(barraLleno);
 }
 
-// Panel de controles CORREGIDO (sin textos innecesarios)
 void PilaVista::dibujarPanelControles() {
-    // Panel de controles compacto (REDUCIDO)
-    sf::RectangleShape panelControles(sf::Vector2f(200, 180));  // REDUCIDO de 240 a 180
+    sf::RectangleShape panelControles(sf::Vector2f(200, 180));
     panelControles.setFillColor(sf::Color(35, 40, 55));
     panelControles.setOutlineThickness(2);
     panelControles.setOutlineColor(sf::Color(255, 150, 100));
-    panelControles.setPosition(sf::Vector2f(15, 230));  // MOVIDO HACIA ARRIBA
+    panelControles.setPosition(sf::Vector2f(15, 230));
 
     sf::Text tituloControles(fuente, "CONTROLES", 12);
     tituloControles.setFillColor(sf::Color::White);
@@ -589,10 +500,3 @@ EstadoMenu PilaVista::obtenerEstado() const {
     return estadoActual;
 }
 
-void PilaVista::limpiarPantalla() {
-    ventana->clear(sf::Color::Black);
-}
-
-void PilaVista::mostrarPantalla() {
-    ventana->display();
-}

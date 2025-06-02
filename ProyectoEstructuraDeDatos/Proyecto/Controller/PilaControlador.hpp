@@ -12,28 +12,24 @@ private:
     PilaVista* vista;
     sf::RenderWindow* ventana;
     sf::Clock reloj;
-
-    // Generador de numeros aleatorios simple
     int semilla;
+    bool salir;
 
 public:
     PilaControlador(sf::RenderWindow* window);
     ~PilaControlador();
 
     void ejecutar();
-    void manejarEventosMenu(const sf::Event& evento);
     void manejarEventosPila(const sf::Event& evento);
 
-    // Operaciones de pila
+    void agregarElementoConAnimacion();
+    void eliminarElementoConAnimacion();
     void agregarElemento();
     void eliminarElemento();
-    void agregarElementoConAnimacion();  // <-- AGREGAR ESTA LÍNEA
-    void eliminarElementoConAnimacion(); // <-- AGREGAR ESTA LÍNEA
     void mostrarTope();
     void verificarVacia();
     void mostrarPilaCompleta();
 
-    // Utilidades
     int generarNumeroAleatorio();
     sf::Color generarColorAleatorio();
 };

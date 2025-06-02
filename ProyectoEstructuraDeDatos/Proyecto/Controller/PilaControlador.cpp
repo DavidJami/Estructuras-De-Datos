@@ -1,6 +1,6 @@
 #include "PilaControlador.hpp"
 
-PilaControlador::PilaControlador(sf::RenderWindow* window) : ventana(window), semilla(1) {
+PilaControlador::PilaControlador(sf::RenderWindow* window) : ventana(window), semilla(1), salir(false) {
     pila = new ModeloPila(8);
     vista = new PilaVista(window);
 
@@ -15,7 +15,10 @@ PilaControlador::~PilaControlador() {
 }
 
 void PilaControlador::ejecutar() {
-    while (ventana->isOpen()) {
+    salir = false;
+    std::cout << "Iniciando gestion de pila..." << std::endl;
+
+    while (ventana->isOpen() && !salir) {
         float deltaTime = reloj.restart().asSeconds();
         vista->actualizarAnimaciones(deltaTime);
 
@@ -23,61 +26,17 @@ void PilaControlador::ejecutar() {
             if (evento->is<sf::Event::Closed>()) {
                 ventana->close();
             }
-
-            switch (vista->obtenerEstado()) {
-                case MENU_PRINCIPAL:
-                    manejarEventosMenu(*evento);
-                    break;
-                case GESTION_PILA:
-                    manejarEventosPila(*evento);
-                    break;
-                default:
-                    break;
-            }
+            manejarEventosPila(*evento);
         }
-
-        // Renderizar segun el estado actual
-        switch (vista->obtenerEstado()) {
-            case MENU_PRINCIPAL:
-                vista->mostrarMenuPrincipal();
-                break;
-            case GESTION_PILA:
-                vista->mostrarGestionPila(*pila);
-                break;
-            default:
-                break;
-        }
+        vista->mostrarGestionPila(*pila);
     }
+
+    std::cout << "Saliendo de gestion de pila..." << std::endl;
 }
 
-void PilaControlador::manejarEventosMenu(const sf::Event& evento) {
-    if (const auto* keyPressed = evento.getIf<sf::Event::KeyPressed>()) {
-        switch (keyPressed->code) {
-            case sf::Keyboard::Key::Num1:
-                vista->cambiarEstado(GESTION_PILA);
-                std::cout << "Entrando a Gestion de Pila" << std::endl;
-                break;
-            case sf::Keyboard::Key::Num2:
-                std::cout << "Gestion de Cola - Proximamente" << std::endl;
-                break;
-            case sf::Keyboard::Key::Num3:
-                std::cout << "Entrando a Gestion de Lista" << std::endl;
-                ejecutarListaDoble(*ventana);  // llama al módulo directamente
-                break;
-
-            case sf::Keyboard::Key::Num4:
-            case sf::Keyboard::Key::Escape:
-                ventana->close();
-                break;
-            default:
-                break;
-        }
-    }
-}
 
 void PilaControlador::manejarEventosPila(const sf::Event& evento) {
     if (const auto* keyPressed = evento.getIf<sf::Event::KeyPressed>()) {
-        // No permitir acciones durante animaciones
         if (vista->hayAnimacionEnCurso()) {
             std::cout << "Espera a que termine la animacion actual..." << std::endl;
             return;
@@ -100,7 +59,7 @@ void PilaControlador::manejarEventosPila(const sf::Event& evento) {
                 mostrarPilaCompleta();
                 break;
             case sf::Keyboard::Key::Escape:
-                vista->cambiarEstado(MENU_PRINCIPAL);
+                salir = true;
                 std::cout << "Regresando al menu principal" << std::endl;
                 break;
             default:
@@ -113,14 +72,9 @@ void PilaControlador::agregarElementoConAnimacion() {
     if (!pila->full()) {
         int valor = generarNumeroAleatorio();
         sf::Color color = generarColorAleatorio();
-
-        // PRIMERO agregar a la pila
         sf::Vector2f posicion(450, 600);
         pila->push(valor, color, posicion);
-
-        // DESPUÉS iniciar la animación (pasando la pila)
         vista->iniciarAnimacionPush(valor, color, *pila);
-
         std::cout << "PUSH animado: Pelota " << valor << " cayendo en el tubo..." << std::endl;
     } else {
         std::cout << "No se puede agregar: Tubo lleno" << std::endl;
@@ -130,18 +84,11 @@ void PilaControlador::agregarElementoConAnimacion() {
 void PilaControlador::eliminarElementoConAnimacion() {
     if (!pila->empty()) {
         NodoPila* elementoAEliminar = pila->top();
-
-        // PRIMERO guardar los datos del elemento
         int valor = elementoAEliminar->dato;
         sf::Color color = elementoAEliminar->color;
-
-        // SEGUNDO iniciar la animación (antes de eliminar, pasando la pila)
         vista->iniciarAnimacionPop(valor, color, *pila);
-
-        // TERCERO eliminar de la pila
         NodoPila* eliminado = pila->pop();
         delete eliminado;
-
         std::cout << "POP animado: Pelota " << valor << " saliendo del tubo..." << std::endl;
     } else {
         std::cout << "No se puede eliminar: Tubo vacio" << std::endl;
@@ -153,7 +100,6 @@ void PilaControlador::agregarElemento() {
         int valor = generarNumeroAleatorio();
         sf::Color color = generarColorAleatorio();
         sf::Vector2f posicion(450, 600);
-
         pila->push(valor, color, posicion);
     } else {
         std::cout << "No se puede agregar: Pila llena" << std::endl;
@@ -169,10 +115,7 @@ void PilaControlador::eliminarElemento() {
 
 void PilaControlador::mostrarTope() {
     if (!pila->empty()) {
-        // Activar visualización especial del TOP
         vista->activarVisualizacionTop();
-
-        // Mostrar en consola con explicación clara
         std::cout << "=== OPERACION TOP ===" << std::endl;
         std::cout << "Consultando elemento del tope SIN quitarlo" << std::endl;
         std::cout << "Valor en el TOP: " << pila->top()->dato << std::endl;

@@ -6,9 +6,9 @@
 #include <locale.h>
 #include <cmath>
 #include "../Model/Pila.hpp"
+#include "VistaBase.hpp"
 
 enum EstadoMenu {
-    MENU_PRINCIPAL,
     GESTION_PILA
 };
 
@@ -27,21 +27,16 @@ struct ElementoAnimado {
     float progreso;
 };
 
-class PilaVista {
+class PilaVista : public VistaBase {
 private:
-    sf::RenderWindow* ventana;
-    sf::Font fuente;
     EstadoMenu estadoActual;
+    const float CIRCLE_RADIUS = 40.0f;
+    const float CIRCLE_SPACING = 10.0f;
+    const int BASE_X = 600;
+    const int BASE_Y = 700;
+    const float VELOCIDAD_ANIMACION = 2.0f;
 
-    // Parametros visuales (CORREGIDOS para que quepan 8 elementos)
-    const float CIRCLE_RADIUS = 35.0f;  // REDUCIDO de 35 a 30
-    const float CIRCLE_SPACING = 8.0f;  // REDUCIDO de 8 a 5
-    const int BASE_X = 500;
-    const int BASE_Y = 600;  // MOVIDO MÁS ABAJO de 550 a 600
-    const float VELOCIDAD_ANIMACION = 2.0f;  // MÁS LENTO de 2.0f a 1.0f
-
-
-    // Sistema de animaciones (ORDEN CORREGIDO)
+    // Sistema de animaciones
     float tiempoAnimacion;
     TipoAnimacion tipoAnimacionActual;
     bool animacionEnCurso;
@@ -51,21 +46,18 @@ private:
 
 public:
     PilaVista(sf::RenderWindow* window);
-    bool cargarFuente();
-
     // Metodos de renderizado
-    void mostrarMenuPrincipal();
     void mostrarGestionPila(const ModeloPila& pila);
     void dibujarPila(const ModeloPila& pila);
-    void dibujarCirculo(const NodoPila* nodo, int posicion, int totalElementos);  // CORREGIDO: 3 parámetros
+    void dibujarCirculo(const NodoPila* nodo, int posicion, int totalElementos);
     void dibujarElementoAnimado();
     void dibujarTuboContenedor();
     void dibujarPanelInfo(const ModeloPila& pila);
     void dibujarPanelControles();
 
     // Sistema de animaciones
-    void iniciarAnimacionPush(int valor, sf::Color color, const ModeloPila& pila);  // AGREGAR pila
-    void iniciarAnimacionPop(int valor, sf::Color color, const ModeloPila& pila);   // AGREGAR pila
+    void iniciarAnimacionPush(int valor, sf::Color color, const ModeloPila& pila);
+    void iniciarAnimacionPop(int valor, sf::Color color, const ModeloPila& pila);
     void actualizarAnimaciones(float deltaTime);
     bool hayAnimacionEnCurso() const;
     void terminarAnimacion();
@@ -79,10 +71,6 @@ public:
     EstadoMenu obtenerEstado() const;
     void activarVisualizacionTop();
     void desactivarVisualizacionTop();
-
-    // Utilidades
-    void limpiarPantalla();
-    void mostrarPantalla();
 };
 
 #endif

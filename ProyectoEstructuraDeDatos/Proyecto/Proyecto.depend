@@ -749,3 +749,84 @@
 1748837117 source:c:\users\asus\documents\estructura de datos\proyecto\view\pilavista.cpp
 	"PilaVista.hpp"
 
+1748858614 source:c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\main.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	"Controller/PilaControlador.hpp"
+	"Controller/ColaControlador.hpp"
+
+1748855143 c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\controller\pilacontrolador.hpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	"../Model/Pila.hpp"
+	"../View/PilaVista.hpp"
+
+1748858991 c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\model\pila.hpp
+	<SFML/Graphics.hpp>
+	<iostream>
+
+1748859763 c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\view\pilavista.hpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	<locale.h>
+	<cmath>
+	"../Model/Pila.hpp"
+	"VistaBase.hpp"
+
+1748840997 source:c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\model\pila.cpp
+	"Pila.hpp"
+
+1748861674 source:c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\view\pilavista.cpp
+	"PilaVista.hpp"
+
+1748850864 source:c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\controller\listadoblemodulo.cpp
+	"../Model/ListaDoble.hpp"
+	"../View/ListaDobleVisual.hpp"
+	<SFML/Graphics.hpp>
+	<iostream>
+
+1748849638 c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\model\listadoble.hpp
+	<iostream>
+
+1748849638 c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\view\listadoblevisual.hpp
+	<SFML/Graphics.hpp>
+	<vector>
+	<string>
+	<thread>
+	<chrono>
+	<algorithm>
+
+1748855612 source:c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\controller\pilacontrolador.cpp
+	"PilaControlador.hpp"
+
+1748857720 source:c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\controller\colacontrolador.cpp
+	"ColaControlador.hpp"
+
+1748855076 c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\controller\colacontrolador.hpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	"../Model/Cola.hpp"
+	"../View/ColaVista.hpp"
+
+1748853047 c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\model\cola.hpp
+	<SFML/Graphics.hpp>
+	<iostream>
+
+1748858067 c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\view\colavista.hpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	<locale.h>
+	<cmath>
+	"../Model/Cola.hpp"
+	"VistaBase.hpp"
+
+1748852930 source:c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\model\cola.cpp
+	"Cola.hpp"
+
+1748858471 source:c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\view\colavista.cpp
+	"ColaVista.hpp"
+
+1748858991 c:\users\asus\estructuras-de-datos\proyectoestructuradedatos\proyecto\view\vistabase.hpp
+	<SFML/Graphics.hpp>
+	<iostream>
+

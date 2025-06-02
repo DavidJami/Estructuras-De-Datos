@@ -18,7 +18,7 @@ struct NodoPila {
           enMovimiento(false), siguiente(nullptr) {}
 };
 
-// Clase Modelo para Pila (implementacion propia sin std::stack)
+// Clase Modelo para Pila
 class ModeloPila {
 private:
     NodoPila* tope;
