@@ -61,8 +61,10 @@ void PilaControlador::manejarEventosMenu(const sf::Event& evento) {
                 std::cout << "Gestion de Cola - Proximamente" << std::endl;
                 break;
             case sf::Keyboard::Key::Num3:
-                std::cout << "Gestion de Lista - Proximamente" << std::endl;
+                std::cout << "Entrando a Gestion de Lista" << std::endl;
+                ejecutarListaDoble(*ventana);  // llama al módulo directamente
                 break;
+
             case sf::Keyboard::Key::Num4:
             case sf::Keyboard::Key::Escape:
                 ventana->close();
