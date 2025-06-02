@@ -44,10 +44,13 @@
 		<Linker>
 			<Add directory="C:/SFML/lib" />
 		</Linker>
+		<Unit filename="Controller/ListaDobleModulo.cpp" />
 		<Unit filename="Controller/PilaControlador.cpp" />
 		<Unit filename="Controller/PilaControlador.hpp" />
+		<Unit filename="Model/ListaDoble.hpp" />
 		<Unit filename="Model/Pila.cpp" />
 		<Unit filename="Model/Pila.hpp" />
+		<Unit filename="View/ListaDobleVisual.hpp" />
 		<Unit filename="View/PilaVista.cpp" />
 		<Unit filename="View/PilaVista.hpp" />
 		<Unit filename="main.cpp" />
